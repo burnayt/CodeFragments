@@ -1,0 +1,33 @@
+Взято из PUN Viking Asset Store.
+В классе создателе создаем параметры
+class Instantiator
+{
+        bool[] enabledRenderers = new bool[2];
+        enabledRenderers[0] = Random.Range(0,2)==0;//Axe
+        enabledRenderers[1] = Random.Range(0, 2) == 0; ;//Shield
+        
+        object[] objs = new object[1]; // Put our bool data in an object array, to send
+        objs[0] = enabledRenderers;
+
+        // Spawn our local player
+        PhotonNetwork.Instantiate(this.playerPrefabName, transform.position, Quaternion.identity, 0, objs);
+}
+
+Получаем их в callback
+class NewObject
+{
+    void OnPhotonInstantiate(PhotonMessageInfo info)
+    {
+        //We know there should be instantiation data..get our bools from this PhotonView!
+        object[] objs = photonView.instantiationData; //The instantiate data..
+        bool[] mybools = (bool[])objs[0];   //Our bools!
+
+        //disable the axe and shield meshrenderers based on the instantiate data
+        MeshRenderer[] rens = GetComponentsInChildren<MeshRenderer>();
+        rens[0].enabled = mybools[0];//Axe
+        rens[1].enabled = mybools[1];//Shield
+
+    }
+
+}
+}
