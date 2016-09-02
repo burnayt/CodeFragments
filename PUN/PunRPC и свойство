@@ -4,21 +4,10 @@ using UnityEngine.UI;
 
 public class PhaseTwoController : MonoBehaviour {
 
-    public PhaseOneController p1Contr;
-    public Text phaseText;
-
     [SerializeField]
     private int timeLeft;
     
     public PhotonView myView;
-
-    public AvatarRespawnController avaRespContr;
-
-    IEnumerator timer;
-
-    public bool isMatchStarts; //Если true Зомби выбран
-
-    public RestartController restartContr;
 
     public int TimeLeft
     {
@@ -40,98 +29,10 @@ public class PhaseTwoController : MonoBehaviour {
         }
     }
 
-    void Awake()
-    {
-        avaRespContr = GameObject.Find("Avatar Respawn Controller").GetComponent<AvatarRespawnController>();
-        phaseText = GameObject.Find("Phase Notification").GetComponent<Text>();
-        restartContr = GameObject.Find("Restart Controller").GetComponent<RestartController>();
-        myView = GetComponent<PhotonView>();
-    }
-
-    // Use this for initialization
-    void Start ()
-    {
-        // Только на мастер клиенте
-
-    }
-
-    [PunRPC]
-    public void MatchStatus(bool status)
-    {
-        isMatchStarts = status;
-    }
-
+    
     [PunRPC]
     public void SetTimeLeft(int time)
     {
         timeLeft = time;
     }
-
-
-    public void Enable()
-    {
-        // Только на мастер клиенте
-        enabled = true;
-        timer = PreMatchPeriod();
-        StartCoroutine(timer);
-    }
-
-    public void Disable()
-    {
-        // Только на мастер клиенте
-        enabled = false;
-        StopCoroutine(timer);
-    }
-
-    public IEnumerator PreMatchPeriod()
-    {
-        timeLeft = 5;
-        while (timeLeft > 0)
-        {
-            timeLeft -= 1;
-            phaseText.text = "Zombie spawn in: " + timeLeft;
-            myView.RPC("rpcUpdateTimerText", PhotonTargets.Others, phaseText.text);
-            yield return new WaitForSeconds(1f);
-        }
-        ChooseZombie();
-        timer = MatchTimerCount();
-        StartCoroutine(timer);
-    }
-
-    public IEnumerator MatchTimerCount() 
-    {
-        myView.RPC("MatchStatus", PhotonTargets.AllBuffered, true);//isMatchStarts = true;
-        timeLeft = 120;
-        while (timeLeft > 0)
-        {
-            timeLeft -= 1;
-            phaseText.text = "Time left: " + timeLeft;
-            myView.RPC("rpcUpdateTimerText", PhotonTargets.Others, phaseText.text);
-            yield return new WaitForSeconds(1f);
-        }
-
-        myView.RPC("MatchStatus", PhotonTargets.AllBuffered, false);
-        //isMatchStarts = false;
-    }
-
-    public void ChooseZombie()
-    {
-        int randomPlayer = Random.Range(0, PhotonNetwork.playerList.Length);
-        avaRespContr.GetComponent<PhotonView>().RPC("SetAvatarClass", PhotonNetwork.playerList[randomPlayer], 1); // 1 mean zombie
-    }
-
-    [PunRPC]
-    public void rpcUpdateTimerText(string text)
-    {
-        phaseText.text = text;
-    }
-    void OnPhotonPlayerDisconnected(PhotonPlayer otherPlayer)
-    {
-        if( PhotonNetwork.playerList.Length < 2)
-        {
-            Disable();
-            p1Contr.Enable();
-        }
-    }
-
 }
