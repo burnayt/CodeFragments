@@ -1,0 +1,12 @@
+//Если достало возиться с компонентами на старте или эвейке!
+//Пиши так там где нужно юзнуть ссыль
+public Component myComp
+
+void Method()
+{
+  if(myComp == null)
+  {
+    myComp = GameObject.Find("HisFuckingName").GetComponent<Component>()
+  }
+  myComp.HappyMethodsUse() // :=)
+}
