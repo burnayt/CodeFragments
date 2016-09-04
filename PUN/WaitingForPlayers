@@ -1,0 +1,83 @@
+using UnityEngine;
+using UnityEngine.UI;
+
+public class WaitingForPlayers : MonoBehaviour
+{
+    //Adjustable fields
+    public int playersNeeded = 2;
+
+    //Event System
+    public delegate void MyMethod();
+    public event MyMethod PlayersReachedEvent;
+    public event MyMethod PlayersLostEvent;
+
+    //internal realization
+    [SerializeField]
+    private bool isDone = false; // обеспечивает единократность обоих событий
+
+    //GUI system
+    public Text text;
+    
+    // Use this for initialization
+    void Start ()
+    {
+        text.text = "Waiting for other players...";
+	    if( PhotonNetwork.playerList.Length >= playersNeeded )
+        {
+            PlayersReachedEvent();
+        }
+	}
+	
+	// Update is called once per frame
+	void Update ()
+    {
+	
+	}
+
+    void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    {
+        if ( isDone == false && PhotonNetwork.playerList.Length >= playersNeeded )
+        {
+            isDone = true;
+            PlayersReachedEvent();
+
+            //GUI
+            text.gameObject.SetActive(false);
+        }
+    }
+
+    void OnPhotonPlayerDisconnected(PhotonPlayer newPlayer)
+    {
+        if (isDone == true && PhotonNetwork.playerList.Length < playersNeeded)
+        {
+            isDone = false;
+            PlayersLostEvent();
+
+            //GUI
+            text.gameObject.SetActive(true);
+        }
+    }
+
+    public void SubscribeReachedEvent(MyMethod method)
+    {
+        //GameObject.Find("WaitingForPlayersGO").GetComponent<WaitingForPlayers>().SubscribeReachedEvent(MyMethod);
+        PlayersReachedEvent += method;
+    }
+
+    public void UnSubscribeReachedEvent(MyMethod method)
+    {
+        PlayersReachedEvent -= method;
+    }
+
+    public void SubscribeLostEvent(MyMethod method)
+    {
+        PlayersLostEvent += method;
+    }
+
+    public void UnSubscribeLostEvent(MyMethod method)
+    {
+        PlayersLostEvent -= method;
+    }
+}
+//end of 08.2016 idea create
+//4.09.2016 created date
