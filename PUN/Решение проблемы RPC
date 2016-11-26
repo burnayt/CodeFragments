@@ -1,0 +1,22 @@
+using UnityEngine;
+
+public class MyClass : MonoBehaviour
+{
+    //Пересылаем значение только что подключившемуся игроку
+    public int myValue;
+
+    [PunRPC]
+    public void rpcInitMyValue(int startValue)
+    {
+        myValue = startValue;
+        myText.text = myValue.ToString();
+    }
+    
+    private void OnPhotonPlayerConnected(PhotonPlayer newPlayer)
+    {
+        if (PhotonNetwork.isMasterClient)
+        {
+            myView.RPC("rpcInitMyValue", newPlayer, myValue);
+        }
+    }
+}
