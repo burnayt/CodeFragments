@@ -1,0 +1,43 @@
+using UnityEngine;
+using System.Collections;
+using UnityEngine.UI;
+using System;
+
+public interface IMaxValue
+{
+    int MaxValue { get;}
+}
+public class SliderInfo : MonoBehaviour
+{
+    public Slider slider;
+
+    public Text maxValueText;
+    public Text minValue;
+    public Text curValue;
+
+    public int maxValueOffset = -1;
+
+    public GameObject maxValueGO; 
+
+    public IMaxValue maxValueSource;
+
+    // Use this for initialization
+    void Start ()
+    {
+        maxValueSource = maxValueGO.GetComponent<IMaxValue>();
+    }
+	
+	// Update is called once per frame
+	void Update ()
+    {
+        maxValueText.text = ( maxValueSource.MaxValue + maxValueOffset ).ToString() ;
+        slider.maxValue = maxValueSource.MaxValue + maxValueOffset;
+        //minValue.text = slider.minValue.ToString();
+
+    }
+
+    public void ValChanged()
+    {
+        curValue.text = slider.value.ToString();
+    }
+}
