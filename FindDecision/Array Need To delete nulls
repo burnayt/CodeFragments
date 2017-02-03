@@ -1,0 +1,22 @@
+public void RemoveLand(Land land)
+    {
+        for (int i = 0; i < landsOwned.Length; i++)
+        {
+            if ( landsOwned[i] == land )
+            {
+                landsOwned[i] = null;
+            }
+        }
+        int nullIndex = -1;
+        for (int i = 0; i < landsOwned.Length; i++)
+        {
+            if(landsOwned[i] == null && nullIndex != -1)
+            {
+                landsOwned [ nullIndex ]  
+            }
+            if( landsOwned [i] != null && nullIndex == -1)
+            {
+                
+            }
+        }
+    }
