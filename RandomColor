@@ -1,0 +1,13 @@
+using UnityEngine;
+　
+public class RandomColor : MonoBehaviour
+{
+    /*
+    USE CASE:
+    GetComponent<Renderer>().material.color = RandColor();
+    */
+    public Color RandColor()
+    {
+        return new Color(Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f), Random.Range(0.0f, 1.0f)/*,alpha optionally*/ );
+    }
+}
