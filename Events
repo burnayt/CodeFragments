@@ -8,3 +8,5 @@ public class MyIntEvent : UnityEvent<int, int>
 {
 }
 public MyIntEvent m_MyEvent;
+
+lambda http://www.blockypixel.com/2012/09/c-in-unity3d-dynamic-methods-with-lambda-expressions/
