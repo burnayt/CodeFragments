@@ -3,3 +3,8 @@ event UnityAction<int, float> my2Ev;
 или 
 using System;
 event Action<int, float> myEvent;
+
+public class MyIntEvent : UnityEvent<int, int>
+{
+}
+public MyIntEvent m_MyEvent;
