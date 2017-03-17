@@ -1,0 +1,5 @@
+event UnityAction<int, float> my2Ev;
+
+или 
+using System;
+event Action<int, float> myEvent;
