@@ -1,0 +1,47 @@
+using UnityEngine;
+
+public class STimer : MonoBehaviour
+{
+    public float timeLeft = 0;
+
+    public event VDlg TimerExpiredEvent; //public delegate void VDlg();
+    public event VFDlg TimerChangedEvent; //public delegate void VFDlg(float p1);
+
+    // Use this for initialization
+    void Start ()
+    {
+        enabled = false;
+	}
+
+    public void Launch(float time)
+    {
+        timeLeft = time;
+        enabled = true;
+    }
+	
+	// Update is called once per frame
+	void Update ()
+    {
+		if ( timeLeft > 0)
+        {
+            timeLeft -= Time.deltaTime;
+            if(TimerChangedEvent!= null)
+            {
+                TimerChangedEvent(timeLeft);
+            }
+            
+        }
+        else
+        {
+            if(TimerExpiredEvent != null)
+            {
+                TimerExpiredEvent();
+            }
+            
+            timeLeft = 0;
+            enabled = false;
+        }
+	}
+}
+public delegate void VDlg();
+public delegate void VFDlg(float p1);
