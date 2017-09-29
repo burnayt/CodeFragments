@@ -1,0 +1,12 @@
+if ( nextTurn < Time.time && grasses.Count > 0)
+        {
+            int i = index;
+            for (; i < index + 10; i++)
+            {
+                grasses[i].Grow(Random.Range(25, 50));
+                
+            }
+            index = i;
+            nextTurn = Time.time + 1;
+            
+        }
